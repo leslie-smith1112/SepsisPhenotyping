@@ -1,7 +1,7 @@
 # Metadata cleaning pre-batch correction ----
 # For cleaning up some of the disease stuff in the metadata to look at during batch correction
 
-## 1.0 Read in original metadata ----
+## 1.0 Read in original manually curated metadata ----
 metadata <- readr::read_csv(here::here("processed-data","Metadata.csv")) # -- this is actually all samples
 
 
@@ -40,4 +40,6 @@ metadata$`Disease Simplified` <- factor(metadata$`Disease Simplified`,levels = c
 
 
 ## * -- save RDS -- *
-saveRDS(metadata, here::here("data","metadata.rds"))
+saveRDS(metadata, here::here("data","all_samples_metadata.rds"))
+#saveRDS(metadata, here::here("data","metadata.rds"))
+

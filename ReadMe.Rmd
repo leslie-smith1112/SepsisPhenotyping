@@ -1,18 +1,19 @@
 ---
-title: "Sepsis Phenotyping"
-output: html_document
-date: "2025-11-03"
+title: "Untitled"
+output: github_document
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## R Markdown
+## GitHub Documents
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+This is an R Markdown format used for publishing markdown documents to GitHub. When you click the **Knit** button all R code chunks are run and a markdown file (.md) suitable for publishing to GitHub is generated.
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+## Including Code
+
+You can include R code in the document as follows:
 
 ```{r cars}
 summary(cars)
@@ -27,3 +28,171 @@ plot(pressure)
 ```
 
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+#### STRART HERE 
+
+This repository is associated with the manuscript: 
+Here we walk through analysis presented in the paper, as well as provide examples for some analysis. TODO 
+
+![Method Overview](images/Method.jpg)
+
+## Dataset Processing
+We survey refine.bio, GEO, and SRA for transcriptomic datasets with adult patients meeting sepsis/septic shock criteria. The datasets included in final analysis are:
+ [GSE100159](),  [GSE13015](), [GSE131761](), [GSE134347](), [GSE137340](), [GSE154918](), [GSE185263](), [GSE189400](), [GSE196117](), [GSE199816](), [GSE211210](), [GSE216902](), [GSE222393](), [GSE232404](), [GSE232753](), [GSE236713](), [GSE236892](),  [GSE32707](),  [GSE33118](), [GSE57065](), [GSE63311](), [GSE65682](),  [GSE66890](), 
+ [GSE69063](),  [GSE74224](), [GSE95233](), [SRP198776](), [Guirgis et al.]().
+ 
+We preprocess each dataset individually to ensure consistent format and to maximize comparability. Metadata from all studies is consolidated into a single file and then cleaned pre- and post- batch correction using scripts `code/Metadata_Clean_PreBatchCorrection.R` and `code/Metadata_Clean_PostBatchCorrection.R`. 
+
+![Dataset Processing Pipeline](images/IndividualDatasetProcessing.png)
+
+## Batch Correction
+All samples from each datasets are used in in batch correction. Datasets are combined into a single matrix using `code/Create_master_matrix.R`. Batch correction was done in R using ComBat (`code/Batch_correction_pca.R`). Processed expression data and metadata for all 3,713 samples included in batch correction are included as Rdata in this repo in data/ and provided at TODO add GEO ID labeled `AllSampleExpressionSubmitted.tsv` and `AllSampleMetadataSubmitted.xlsx`. 
+
+We can look at samples before and after batch correction here:
+![Dataset Batch Correction](images/batchCorrectionHor.png)
+
+Samples values after batch correction are provided in GEO dataset: GSE TODO. 
+
+We can read in all samples here:
+
+```{r all_samples}
+all_metadata <- readRDS(here::here("data","all_samples_metadata.rds"))
+all_expr <- readRDS(here::here("data","all_samples_expression.rds"))
+``` 
+
+Lets look at the metadata we have for this dataset. We have 68 columns in this file, comprising all metadata available for each included study. 
+```{r}
+colnames(all_metadata)
+```
+
+Importantly, columns used in our analysis include: 
+
+|     Column Name            |   Description                            |
+|   ---------------          | ---------------                          |
+| `Sample ID`                | Sample ID                                |
+| `Dataset`                  | Associated Dataset ID                    |
+| `Disease`                  | Unedited disease classification          |
+| `Disease Simplified`       | Edited/simplified disease classification |
+| `Timepoint`                | Time sample was taken                    |
+| `Is Repeat Sample`         | Whether sample was first from the patient|
+| `Sepsis/Septic Shock`      | Sepsis-shock classification              |
+| `Shock`                    | Shock classification                     |
+| `Survival`                 | Mortality classification                 |
+| `Time to Event`            | Time to mortality event                  |
+| `Gender`                   | Sample Sex                               |
+| `Age`                      | Sample Age                               |
+| `Race`                     | Sample Race                              |
+| `PreviouslyDefinedSubtypes`| Subtype assigned by previous study       |
+
+
+Lets look at all diseases present in this file:
+```{r}
+table(all_metadata$`Disease`)
+```
+
+Now lets look at the simplified disease column. We have taken the diseases in `Disease` and cleaned them in this column for simplicity.
+```{r}
+table(all_metadata$`Disease Simplified`)
+```
+
+Similarly, we can look at samples included in our study (sepsis samples only):
+
+```{r all_samples}
+disease_metadata <- readRDS(here::here("data","disease_metadata.rds"))
+disease_expr <- readRDS(here::here("data","disease_expression.rds"))
+table(disease_metadata$`Disease Simplified`)
+``` 
+
+We can look at the variance within our disease samples.
+
+TODO 
+
+
+## Gene and Sample Selection
+Before we start analysis to identify molecular subtypes we narrow down  
+
+
+# Primary Pipeline Script Summary
+```
+┌──────────────────────────────────────────────────────────┐
+│                    Create_master_matrix.R                |  
+|                                                          |
+| PURPOSE:                                                 |
+|      ▷ Combine all datasets into a single matrix         |
+| INPUT:                                                   |
+|      ▷ 28 individual preprocessed datasets               |  
+│      ▷ Original manually curated metadata file           |                    
+│ OUTPUT:                                                  |
+|      ▷ data/raw_all_samples_expression.rds               |
+|         ┗ Single matrix with all datasets combined       |
+|      ▷ data/batchIDs_allSamples.rds                      |
+│         ┗ Batch IDs for use in ComBat                    |
+|      ▷ data/all_samples_metadata.rds                     |    
+|         ┗ Cleaned metadata file                          |
+└────────────────────────┬─────────────────────────────────┘
+                         │
+                         ▼
+┌──────────────────────────────────────────────────────────┐
+│                  Batch_correction_pca.R                  |  
+|                                                          |
+| PURPOSE:                                                 |
+|      ▷ Batch correct datasets to remove technical        |
+|         variation                                        |
+| INPUT:                                                   |
+|      ▷ data/raw_all_samples_expression.rds               |
+│      ▷ data/batchIDs_allSamples.rds                      |  
+|      ▷ data/all_samples_metadata.rds
+|      ▷ data/disease_metadata.rds
+│ OUTPUT:                                                  |
+|      ▷ data/Init_PCA_values_allSamples.rds               |
+|         ┗ PCA values for all samples prior to batch      |  
+|           correction                                     |
+|      ▷ figures/Initial_PCA_Dataset.png                   |
+│         ┗ Scatterplot of samples prior to batch          |
+|           correction                                     |
+|         ┗ Colored by dataset                             |
+|      ▷ figures/Initial_PCA_Disease.png                   |
+│         ┗ Scatterplot of samples prior to batch          |
+|           correction                                     |
+|         ┗ Colored by disease                             |
+|      ▷ data/all_samples_expression.rds                   |
+│         ┗ Batch corrected expression matrix              |
+|           correction, all samples all genes              |               
+|      ▷ figures/BatchCorrected_PCA_values_allSamples.rds  |
+│         ┗ PCA values for all samples after batch         |
+|           correction                                     |
+|      ▷ figures/BatchCorrected_PCA_Dataset.png            |
+│         ┗ Scatterplot of samples colored by dataset      |  
+|           after batch correction                         |  
+|      ▷ figures/BatchCorrected_PCA_Disease.png            |
+│         ┗ Scatterplot of samples colored by disease      |
+|           after batch correction                         |    
+|      ▷ data/disease_expression_all_genes.rds"                      |
+│         ┗ Expression values for sepsis samples only      |
+|           after batch correction                         |
+|      ▷ figures/BatchCorrected_PCA_DiseaseOnly.png        |
+│         ┗ Scatterplot of sepsis samples colored by       |
+|           disease after batch correction                 |                
+|                                                          |
+└────────────────────────┬─────────────────────────────────┘
+                         │
+                         ▼
+┌─────────────────────────────────────────────────────────────────────┐
+│                        CutMixedGenes.R                       |  
+|                                                                     |
+| PURPOSE:                                                            |
+|       ▷ Identifying genes to include for analysis       |
+| INPUT:                                                              |
+|      ▷ data/disease_expression_all_genes.rds
+│      ▷ data/disease_metadata.rds
+│ OUTPUT:                                                             |
+|      ▷ data/disease_expression.rds
+                     |
+|         (all diseases/control) and all genes                        |
+|         (data/raw_all_samples_expression.rds)                       |
+|      ▷ Batch IDs for use in ComBat                                  |
+│         (data/batchIDs_allSamples.rds)                              |OUTPUT: saveRDS(expr_dat_var, here::here("data","disease_expression.rds"))
+└────────────────────────┬────────────────────────────────────────────┘
+                         │
+                         ▼
+                         
+

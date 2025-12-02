@@ -1,16 +1,17 @@
-## Cleaning metadata; checking columns and things
+## Final Cleaning metadata; checking columns and things
 # Metadata clean after batch correction -- needs the batch corrected matrix and trims metadata to samples we want
-
+# Only disease samples
 
 ## 1.0 Read in original metadata ----
-metadata <- readRDS(here::here("data","metadata.rds"))
+metadata <- readRDS(here::here("data","all_samples_metadata.rds"))
+#metadata <- readRDS(here::here("data","metadata.rds"))
 
 
 # 1.3 Make sreadRDS()# 1.3 Make sure all metadata samples are in expression matrix
 dim(metadata)
 colnames(metadata)
 # reading in expression matrix to keep metadata that we have metadata for
-expr <- readRDS(here::here("data","expr_batchCorrected_allSamples.rds"))
+expr <- readRDS(here::here("data","all_samples_expression.rds"))
 expr[1:5,1:5]
 dim(expr)
 #trim metadata
@@ -227,6 +228,6 @@ table(meta_dat$Gender)
 dim(meta_dat)
 
 ## * -- save RDS -- * 
-saveRDS(meta_dat,here::here("data","metadata_clean.rds")) 
+saveRDS(meta_dat,here::here("data","disease_metadata.rds")) 
 
 
