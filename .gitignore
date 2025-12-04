@@ -4,3 +4,5 @@
 .Ruserdata
 code/preprocessing/
 code/Cluster_compares.R
+code/Stats.R
+code/DEandPathwayAnalysis.R
