@@ -1,4 +1,4 @@
-Molecular Subtypoing of Sepsis
+Molecular Subtyping of Sepsis
 ================
 
 This repository is associated with the manuscript and GEO Dataset

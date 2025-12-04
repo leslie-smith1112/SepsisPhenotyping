@@ -1,5 +1,5 @@
 ---
-title: "Molecular Subtypoing of Sepsis"
+title: "Molecular Subtyping of Sepsis"
 output: github_document
 ---
 
