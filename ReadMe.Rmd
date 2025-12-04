@@ -1,44 +1,18 @@
 ---
-title: "Untitled"
+title: "Molecular Subtypoing of Sepsis"
 output: github_document
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
 
-## GitHub Documents
-
-This is an R Markdown format used for publishing markdown documents to GitHub. When you click the **Knit** button all R code chunks are run and a markdown file (.md) suitable for publishing to GitHub is generated.
-
-## Including Code
-
-You can include R code in the document as follows:
-
-```{r cars}
-summary(cars)
-```
-
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
-#### STRART HERE 
-
-This repository is associated with the manuscript: 
-Here we walk through analysis presented in the paper, as well as provide examples for some analysis. TODO 
+This repository is associated with the manuscript and GEO Dataset `GSE310929`
+Here we walk through processing of datasets presented in the associated paper, as well as provide examples of using the dataset. 
 
 ![Method Overview](images/Method.jpg)
 
 ## Dataset Processing
 We survey refine.bio, GEO, and SRA for transcriptomic datasets with adult patients meeting sepsis/septic shock criteria. The datasets included in final analysis are:
- [GSE100159](),  [GSE13015](), [GSE131761](), [GSE134347](), [GSE137340](), [GSE154918](), [GSE185263](), [GSE189400](), [GSE196117](), [GSE199816](), [GSE211210](), [GSE216902](), [GSE222393](), [GSE232404](), [GSE232753](), [GSE236713](), [GSE236892](),  [GSE32707](),  [GSE33118](), [GSE57065](), [GSE63311](), [GSE65682](),  [GSE66890](), 
- [GSE69063](),  [GSE74224](), [GSE95233](), [SRP198776](), [Guirgis et al.]().
+ [GSE100159](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE100159),  [GSE13015](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE13015), [GSE131761](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE131761), [GSE134347](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE134347), [GSE137340](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE137340), [GSE154918](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE154918), [GSE185263](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE185263), [GSE189400](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE189400), [GSE196117](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE196117), [GSE199816](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE199816), [GSE211210](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE211210), [GSE216902](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE216902), [GSE222393](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE222393), [GSE232404](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE232404), [GSE232753](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE232753), [GSE236713](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE236713), [GSE236892](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE236892),  [GSE32707](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE32707),  [GSE33118](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE33118), [GSE57065](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE57065), [GSE63311](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE63311), [GSE65682](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE65682),  [GSE66890](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE66890), 
+[GSE69063](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE69063),  [GSE74224](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE74224), [GSE95233](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE95233), [SRP198776](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE131411), [GSE310929](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE310929).
  
 We preprocess each dataset individually to ensure consistent format and to maximize comparability. Metadata from all studies is consolidated into a single file and then cleaned pre- and post- batch correction using scripts `code/Metadata_Clean_PreBatchCorrection.R` and `code/Metadata_Clean_PostBatchCorrection.R`. 
 
@@ -96,103 +70,26 @@ table(all_metadata$`Disease Simplified`)
 
 Similarly, we can look at samples included in our study (sepsis samples only):
 
-```{r all_samples}
+```{r }
 disease_metadata <- readRDS(here::here("data","disease_metadata.rds"))
 disease_expr <- readRDS(here::here("data","disease_expression.rds"))
 table(disease_metadata$`Disease Simplified`)
 ``` 
 
-We can look at the variance within our disease samples.
-
-TODO 
 
 
-## Gene and Sample Selection
-Before we start analysis to identify molecular subtypes we narrow down  
 
-
-# Primary Pipeline Script Summary
-```
-┌──────────────────────────────────────────────────────────┐
-│                    Create_master_matrix.R                |  
-|                                                          |
-| PURPOSE:                                                 |
-|      ▷ Combine all datasets into a single matrix         |
-| INPUT:                                                   |
-|      ▷ 28 individual preprocessed datasets               |  
-│      ▷ Original manually curated metadata file           |                    
-│ OUTPUT:                                                  |
-|      ▷ data/raw_all_samples_expression.rds               |
-|         ┗ Single matrix with all datasets combined       |
-|      ▷ data/batchIDs_allSamples.rds                      |
-│         ┗ Batch IDs for use in ComBat                    |
-|      ▷ data/all_samples_metadata.rds                     |    
-|         ┗ Cleaned metadata file                          |
-└────────────────────────┬─────────────────────────────────┘
-                         │
-                         ▼
-┌──────────────────────────────────────────────────────────┐
-│                  Batch_correction_pca.R                  |  
-|                                                          |
-| PURPOSE:                                                 |
-|      ▷ Batch correct datasets to remove technical        |
-|         variation                                        |
-| INPUT:                                                   |
-|      ▷ data/raw_all_samples_expression.rds               |
-│      ▷ data/batchIDs_allSamples.rds                      |  
-|      ▷ data/all_samples_metadata.rds
-|      ▷ data/disease_metadata.rds
-│ OUTPUT:                                                  |
-|      ▷ data/Init_PCA_values_allSamples.rds               |
-|         ┗ PCA values for all samples prior to batch      |  
-|           correction                                     |
-|      ▷ figures/Initial_PCA_Dataset.png                   |
-│         ┗ Scatterplot of samples prior to batch          |
-|           correction                                     |
-|         ┗ Colored by dataset                             |
-|      ▷ figures/Initial_PCA_Disease.png                   |
-│         ┗ Scatterplot of samples prior to batch          |
-|           correction                                     |
-|         ┗ Colored by disease                             |
-|      ▷ data/all_samples_expression.rds                   |
-│         ┗ Batch corrected expression matrix              |
-|           correction, all samples all genes              |               
-|      ▷ figures/BatchCorrected_PCA_values_allSamples.rds  |
-│         ┗ PCA values for all samples after batch         |
-|           correction                                     |
-|      ▷ figures/BatchCorrected_PCA_Dataset.png            |
-│         ┗ Scatterplot of samples colored by dataset      |  
-|           after batch correction                         |  
-|      ▷ figures/BatchCorrected_PCA_Disease.png            |
-│         ┗ Scatterplot of samples colored by disease      |
-|           after batch correction                         |    
-|      ▷ data/disease_expression_all_genes.rds"                      |
-│         ┗ Expression values for sepsis samples only      |
-|           after batch correction                         |
-|      ▷ figures/BatchCorrected_PCA_DiseaseOnly.png        |
-│         ┗ Scatterplot of sepsis samples colored by       |
-|           disease after batch correction                 |                
-|                                                          |
-└────────────────────────┬─────────────────────────────────┘
-                         │
-                         ▼
-┌─────────────────────────────────────────────────────────────────────┐
-│                        CutMixedGenes.R                       |  
-|                                                                     |
-| PURPOSE:                                                            |
-|       ▷ Identifying genes to include for analysis       |
-| INPUT:                                                              |
-|      ▷ data/disease_expression_all_genes.rds
-│      ▷ data/disease_metadata.rds
-│ OUTPUT:                                                             |
-|      ▷ data/disease_expression.rds
-                     |
-|         (all diseases/control) and all genes                        |
-|         (data/raw_all_samples_expression.rds)                       |
-|      ▷ Batch IDs for use in ComBat                                  |
-│         (data/batchIDs_allSamples.rds)                              |OUTPUT: saveRDS(expr_dat_var, here::here("data","disease_expression.rds"))
-└────────────────────────┬────────────────────────────────────────────┘
-                         │
-                         ▼
-                         
-
+# Pipeline Script Descriptions
+| Script ID | Script name                  | Purpose / Function                                              | Inputs                                                               | Outputs                                                                |
+|-----------|------------------------------|------------------------------------------------------------------|-------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------|
+| S01       | 01_Create_master_matrix.R          | Load and combine all datasets into a single matrix  | `datasets/*/QN_Expression.tsv`: 28 individual preprocessed datasets.  <br> `metadata.tsv`: Original manually curated metadata file                            | `data/raw_all_samples_expression.rds`: Single matrix with raw expression values from all datasets combined, sample × feature. <br>  `data/batchIDs_allSamples.rds`: Batch IDs for use in ComBat  <br> `data/all_samples_metadata.rds`: Cleaned metadata file|
+| S02       | 02_Metadata_clean_pre_batch_correction.R           | Perform initial cleaning of metadata from manually curated file.       | `Metadata.tsv`: Manually curated metadata file for all samples in every study. Not provided in repository. | `data/ll_samples_metadata.rds`: Cleaned metadata matrix. 
+| S03       | 03_Batch_correction_pca.R           | Perform batch correction to remove techinical variation       | `data/raw_all_samples_expression.rds`: Single matrix with raw expression values from all datasets combined, sample × feature from S01. <br> `data/batchIDs_allSamples.rds`: Batch IDs for use in ComBat from S01 <br> `data/all_samples_metadata.rds`: Cleaned metadata file from TODO    <br>   `data/disease_metadata.rds`: Cleaned metadata file for disease samples only from TODO                      | `data/all_samples_expression.rds`:Batch corrected expression matrix for all samples and all genes <br> `data/Init_PCA_values_allSamples.rds`:PCA values for all samples prior to batch correction <br>  `TODO PCA values for all samples after batch correction`:<br> `data/disease_expression_all_genes.rds`: Expression values for sepsis samples only after batch correction   |
+| S04       | 04_Metadata_clean_post_batch_correction          | Perform additional cleaning of metadata, reduce sepsis samples only, clean categories such as race and gender.             | `data/all_samples_metadata.rds`: Cleaned metadata matrix.                                   | `data/disease_metadata.rds`: Metadata for sepsis samples only.  |
+| S05       | 05_Cut_mixed_genes.R| Cut down genes to immune related genes, lipid genes , and most varaible genes.      | `data/disease_expression_all_genes.rds`: Expression values for sepsis samples only after batch correction <br> `data/disease_metadata.rds`: Metadata for sepsis samples only.                | `data/disease_expression.rds`: Expression for sepsis samples and selected genes.                           |
+| S06       | 06_Cluster_compares.R       | Perform unsupercised clustering analysis with KM, HC, and PAM method and compare cluster results.         | `data/disease_expression.rds`: Expression for sepsis samples and selected genes from S05.                      | `results/pathway_results.rds`: Enrichment scores and adjusted p‑values for each pathway. |
+| S06       | 06_Silhouette_scores.R         |  Function called from 06_Cluster_compares.R, function calculates silhouette scores for given clusters..      | Median centered matrix from 06_Cluster_compares.R, created in 06_Cluster_compares.R and passed as a parameter to function. | `results/cluster_compares/{PAM, HC, KM}/Sample_Cluster_Assignments_i.tsv`: tsv holding assigned cluster IDs for each sample for each K with given clustering algorithm. <br> `results/cluster_compares/{PAM, HC, KM}/Sil_Scores.log`: Log holding results from silouette calcualtion for every K for given clustering algorithm. <br> `results/cluster_compares/{PAM, HC, KM}/ClusterIDs.rds`: R object holding assigned cluster IDs for each sample for each K with given clustering algorithm. |  
+| S07       | 07_Differential_expression_analysis.R      | Conduct differential expression analysis for each molecular subtype.        | `data/disease_expression.rds`: Expression for sepsis samples and selected genes. <br> : `data/disease_metadata.rds`: Metadata for sepsis samples only.| `results/differential_expression/*`: Differential expression results for each molecular subtype.                             |
+| S08       | 08_Cluster_DE_analysis.R          | Idnetify genes that are differentially expressed in a cluster in the same direction in all 3 comparisons to other molecular subtypes, and assign that gene to the molecular subtype.     | `results/differential_expression/*.tsv`: Results from each molecular subtype differential expression comparison (each molecular subtype is compared to every other molecular subtype).                               | `results/differential_expression/*_DEALL_genes.tsv`: File holding differentially expressed genes for each molecular subtype comparison with annotation for how many times the gene is differentially expressed for that subtype.         |
+| S09       | 09_Mortality_analysis.R          | Script to calculate RMST for each cluster and create Kaplan Meier plot.      | `data/disease_metadata.rds`; Metadata for sepsis samples only.                                 | `results/survival_analysis/RMST1VSAll.log`: RMST results for each cluster (calcuated as 1 VS all others). <br> `results/survival_analysis/Survival_DE.{rds, tsv}` <br> This script also created the Kaplan Meier plot and volcano plot for survival.         |       
+| S10       | 10_Stats.R       | Statistical analysis of demoraphic variables.           |   `data/disease_metadata.rds`: Metadata for sepsis samples only. <br>   `data/disease_expression.rds`: Expression for sepsis samples and selected genes.              | `results/stats/*`: Statistical results for molecular subtypes and all demographic variables.    
