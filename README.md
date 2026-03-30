@@ -212,6 +212,8 @@ table(all_metadata$`Disease Simplified`)
     ##                                       Sepsis - Shock 
     ##                                                  496
 
+
+## Subset of Samples Included in our Analysis
 Similarly, we can look at samples included in our study. These samples are sepsis samples
 which meet our inclusion/exclusion criteria:
 
@@ -233,6 +235,8 @@ which meet our inclusion/exclusion criteria:
 | Parasitic infections |
 | Sepsis melioidosis |
 
+
+The subset of samples used in our analysis are included in this repository and can be read in with the code below.
 ``` r
 disease_metadata <- readRDS(here::here("data","disease_metadata.rds"))
 disease_expr <- readRDS(here::here("data","disease_expression.rds"))
