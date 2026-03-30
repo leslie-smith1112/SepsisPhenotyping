@@ -212,8 +212,26 @@ table(all_metadata$`Disease Simplified`)
     ##                                       Sepsis - Shock 
     ##                                                  496
 
-Similarly, we can look at samples included in our study (sepsis samples
-only after applying our additional inclusion/exclusion criteria. This criteria can be found in the preprint [here](https://www.biorxiv.org/content/10.64898/2026.03.28.714506v1).):
+Similarly, we can look at samples included in our study. These samples are sepsis samples
+which meet our inclusion/exclusion criteria:
+
+| Inclusion Criteria | 
+|----|
+| Adult samples only (no pediatric) |
+| Meeting sepsis or septic/shock criteria |
+| Bulk RNA expression data |
+| Whole blood samples only |
+| Blood drawn within 48 hours of sepsis recognition |
+| If multiple time points for samples, only earliest is included for analysis |
+
+| Exclusion Criteria | 
+|----|
+| Pediatric samples |
+| Immunocompromised |
+| Death within 12 hours of hospital admission |
+| COVID-19 diagnosis |
+| Parasitic infections |
+| Sepsis melioidosis |
 
 ``` r
 disease_metadata <- readRDS(here::here("data","disease_metadata.rds"))
