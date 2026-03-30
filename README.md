@@ -1,8 +1,8 @@
 Molecular Subtyping of Sepsis
 ================
 
-This repository is associated with the manuscript and GEO Dataset
-`GSE310929` Here we walk through processing of datasets presented in the
+This repository is associated with the manuscript [Deciphering sepsis molecular subtypes using large-scale data to identify subtype-specific drug repurposing](https://www.biorxiv.org/content/10.64898/2026.03.28.714506v1) and GEO Dataset
+[GSE310929](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE310929). Here we walk through processing of datasets presented in the
 associated paper, as well as provide examples of using the dataset.
 
 <figure>
@@ -213,7 +213,7 @@ table(all_metadata$`Disease Simplified`)
     ##                                                  496
 
 Similarly, we can look at samples included in our study (sepsis samples
-only):
+only after applying our additional inclusion/exclusion criteria. This criteria can be found in the preprint [here](https://www.biorxiv.org/content/10.64898/2026.03.28.714506v1).):
 
 ``` r
 disease_metadata <- readRDS(here::here("data","disease_metadata.rds"))
